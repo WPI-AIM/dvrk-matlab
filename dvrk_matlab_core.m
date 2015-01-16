@@ -3,6 +3,7 @@
 %Worcester Poltechnic Institute (WPI)
 clear all
 close all
+clear global
 clc;
 
 fig = dvrk_matlab_gui;
