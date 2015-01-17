@@ -16,9 +16,11 @@ global node;
 if (get(hObject,'Value') == get(hObject,'Max'))
 	display('Connecting to ROS server, make sure ROS is running before hand');
     node = rosmatlab.node('/dvrk_matlab_core');
+    set(hObject,'String','Connected!');
 else
 	display('Deleting Node');
     node.delete;
+    set(hObject,'String','Disconnected!');
 end
 end
 
