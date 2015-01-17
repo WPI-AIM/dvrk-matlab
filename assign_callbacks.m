@@ -1,12 +1,8 @@
 function assign_callbacks(gui_handle)
-global node;
-global psm1_sub psm2_sub mtmr_sub mtml_sub;
-global psm1_pub psm2_pub mtmr_pub mtml_pub;
-global psm1_pub_msg
-
 %Assign callback to each gui element in this function
 set(gui_handle.radiobutton_connect_to_ros,'Callback',{@radio_connect_to_ros_cb});
 set(gui_handle.radiobutton_connect_to_psm1,'Callback',{@radio_connect_to_psm1_cb,gui_handle});
+set(gui_handle.radiobutton_connect_to_mtmr,'Callback',{@radio_connect_to_mtmr_cb,gui_handle});
 end
 
 %CallBack for Enabling connection to ROS
@@ -24,8 +20,7 @@ else
 end
 end
 
-%Callback for setting PSM1 publisher and subscriber
-
+%Callback for setting PSM1 publisher and subscribe
 function radio_connect_to_psm1_cb(hObject,eventData,gui_handles)
 global node psm1_sub psm1_pub psm1_pub_msg psm1_pub_ready;
 if (get(hObject,'Value') == get(hObject,'Max'))
@@ -37,13 +32,6 @@ if (get(hObject,'Value') == get(hObject,'Max'))
     display('Creating PSM1 Publisher');
     psm1_pub = node.addPublisher('/dvrk_psm/set_position_joint','sensor_msgs/JointState');
     %Set the callback of PSM sliders to one function
-%     set(gui_handles.slider1_psm1,'Callback',{@psm1_publisher_cb,gui_handles});
-%     set(gui_handles.slider2_psm1,'Callback',{@psm1_publisher_cb,gui_handles});
-%     set(gui_handles.slider3_psm1,'Callback',{@psm1_publisher_cb,gui_handles});
-%     set(gui_handles.slider4_psm1,'Callback',{@psm1_publisher_cb,gui_handles});
-%     set(gui_handles.slider5_psm1,'Callback',{@psm1_publisher_cb,gui_handles});
-%     set(gui_handles.slider6_psm1,'Callback',{@psm1_publisher_cb,gui_handles});
-%     set(gui_handles.slider7_psm1,'Callback',{@psm1_publisher_cb,gui_handles});
     psm1_pub_ready = true;
 else
 	disp('Deleting PSM1 Subscriber Topic');
@@ -54,39 +42,60 @@ else
 end
 end
 
+%Callback for setting PSM1 publisher and subscribe
+function radio_connect_to_mtmr_cb(hObject,eventData,gui_handles)
+global node mtmr_sub mtmr_pub mtmr_pub_msg mtmr_pub_ready;
+if (get(hObject,'Value') == get(hObject,'Max'))
+	display('Subscribing to MTMR topic');
+    mtmr_sub = node.addSubscriber('/dvrk_mtm/joint_position_current','sensor_msgs/JointState',10);
+    mtmr_sub.addCustomMessageListener({@mtmr_subscriber_cb,gui_handles});
+    %Create snsr_msg/JS type message
+    mtmr_pub_msg = rosmatlab.message('sensor_msgs/JointState',node);
+    display('Creating MTMR Publisher');
+    mtmr_pub = node.addPublisher('/dvrk_mtm/set_position_joint','sensor_msgs/JointState');
+    %Set the callback of PSM sliders to one function
+    mtmr_pub_ready = true;
+else
+	disp('Deleting MTMR Subscriber Topic');
+    node.removeSubscriber(mtmr_sub);
+    disp('Deleting PSM1 Publisher');
+    node.removePublisher(mtmr_pub);
+    mtmr_pub_ready = false;
+end
+end
+
 % PSM Subscriber Callback for "/dvrk_psm/joint_position_current"
 function psm1_subscriber_cb(handle,event,gui_handles)
 message = event.JavaEvent.getSource;
 currPosition = message.getPosition;
 if (size(currPosition,1) ~= 7)
-    disp('Error! Number of Joints is not equal to 7');
+    disp('PSM: Error! Number of Joints is not equal to 7');
 else
-set(gui_handles.edit1_psm,'String',num2str(currPosition(1)));
-set(gui_handles.edit2_psm,'String',num2str(currPosition(2)));
-set(gui_handles.edit3_psm,'String',num2str(currPosition(3)));
-set(gui_handles.edit4_psm,'String',num2str(currPosition(4)));
-set(gui_handles.edit5_psm,'String',num2str(currPosition(5)));
-set(gui_handles.edit6_psm,'String',num2str(currPosition(6)));
-set(gui_handles.edit7_psm,'String',num2str(currPosition(7)));
+set(gui_handles.edit1_psm1,'String',num2str(currPosition(1)));
+set(gui_handles.edit2_psm1,'String',num2str(currPosition(2)));
+set(gui_handles.edit3_psm1,'String',num2str(currPosition(3)));
+set(gui_handles.edit4_psm1,'String',num2str(currPosition(4)));
+set(gui_handles.edit5_psm1,'String',num2str(currPosition(5)));
+set(gui_handles.edit6_psm1,'String',num2str(currPosition(6)));
+set(gui_handles.edit7_psm1,'String',num2str(currPosition(7)));
 end
 end
 
+% MTM Subscriber Callback for "/dvrk_mtm/joint_position_current"
+function mtmr_subscriber_cb(handle,event,gui_handles)
+message = event.JavaEvent.getSource;
+currPosition = message.getPosition;
+if (size(currPosition,1) ~= 7)
+    disp('MTMR: Error! Number of Joints is not equal to 7');
+else
+set(gui_handles.edit1_mtmr,'String',num2str(currPosition(1)));
+set(gui_handles.edit2_mtmr,'String',num2str(currPosition(2)));
+set(gui_handles.edit3_mtmr,'String',num2str(currPosition(3)));
+set(gui_handles.edit4_mtmr,'String',num2str(currPosition(4)));
+set(gui_handles.edit5_mtmr,'String',num2str(currPosition(5)));
+set(gui_handles.edit6_mtmr,'String',num2str(currPosition(6)));
+set(gui_handles.edit7_mtmr,'String',num2str(currPosition(7)));
+end
+end
 
-%Store position in new variable to extract individual joint values
-%Commented this temporarily since cb causing stop start kind of publishing,
-%.Will implement polling,
-% function psm1_publisher_cb(hObject,eventData,gui_handles)
-% global psm1_pub psm1_pub_msg;
-%      joint1 = get(gui_handles.slider1_psm1,'Value');
-%      joint2 = get(gui_handles.slider2_psm1,'Value');
-%      joint3 = get(gui_handles.slider3_psm1,'Value');
-%      joint4 = get(gui_handles.slider4_psm1,'Value');
-%      joint5 = get(gui_handles.slider5_psm1,'Value');
-%      joint6 = get(gui_handles.slider6_psm1,'Value');
-%      joint7 = get(gui_handles.slider7_psm1,'Value');
-%      
-%      psm1_pub_msg.setPosition([joint1,joint2,joint3,joint4,joint5,joint6,joint7]);
-%     % psm1_pub.publish(psm1_pub_msg);
-%     % pause(0.001);
-% end
 
