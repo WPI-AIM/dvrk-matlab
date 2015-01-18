@@ -1,3 +1,6 @@
+%Developed By: Adnan Munawar (amunawar@wpi.edu)
+%AIM Labs
+%Worcester Poltechnic Institute (WPI)
 function assign_callbacks(gui_handle)
 %Assign callback to each gui element in this function
 set(gui_handle.radiobutton_connect_to_ros,'Callback',{@radio_connect_to_ros_cb});

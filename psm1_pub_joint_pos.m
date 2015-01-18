@@ -1,3 +1,6 @@
+%Developed By: Adnan Munawar (amunawar@wpi.edu)
+%AIM Labs
+%Worcester Poltechnic Institute (WPI)
 function psm1_pub_joint_pos(gui_handles)
 global psm1_pub psm1_pub_msg  
     psm1_set_jnt_names(gui_handles);

@@ -1,3 +1,6 @@
+%Developed By: Adnan Munawar (amunawar@wpi.edu)
+%AIM Labs
+%Worcester Poltechnic Institute (WPI)
 function mtmr_pub_joint_pos(gui_handles)
 global mtmr_pub mtmr_pub_msg  
     mtmr_set_jnt_names(gui_handles);
