@@ -4,7 +4,22 @@ Matlab Interface for controlling dVRK. Requires dvrk-ros and its dependencies
 **By: Adnan Munawar**-
 **Worcester Polytechnic Institute**
 
- **HOW TO RUN THE CODE**
+
+ **Requirements**
+  * Matlab ROS IO must be installed. 
+   * Go to http://www.mathworks.com/hardware-support/robot-operating-system.html?refresh=true
+   * Download the Matlab ROS IO for your system and follow the instructions to install. If there is any issue with installation, let me know, I know about most of the issues and can help you set it up in most cases
+   * After succesful installation, try running a few examples from documentation to see you have set up Matlab ROS IO correctly.
+  * You should have the **dvrk_ros** package (and it's **CISST** and **SAW** requirements) installed and working. 
+  * Just to make sure MATLAB nodes can communicate to ROS core, you should have set the **ROS_HOSTNAME** and **ROS_MATER_URI** environment variables. To do so for all the shells:
+   * Open terminal
+   * Type gedit ~/.bashrc
+   * Add the following two lines at the end
+    * export ROS_HOSTNAME=localhost
+    * export ROS_MASTER_URI=http://localhost:11311
+   * Save the file. Reload your shell
+
+**HOW TO RUN THE CODE**
  * Make sure ROS is running, from the **dvrk_ros** package, you should either be running **test_dvrk_mtm.launch** file or **test_dvrk_psm.launch** file
  * Open the **dvrk_matlab_core.m** file
  * Run this file. A GUI window will open
