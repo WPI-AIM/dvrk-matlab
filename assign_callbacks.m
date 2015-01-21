@@ -33,14 +33,20 @@ if (get(hObject,'Value') == get(hObject,'Max'))
 if (PSM1.active == true)
 PSM1.state_msg.setData('Home');
 PSM1.state_pub.publish(PSM1.state_msg);
-display('Sending Home Command to PSM1')
+display('Sending Home Command to PSM1');
+PSM1.jnt_pub_ready = true;
 end
 % Set state_msg = "Home" and publish to specified topic
 if (MTMR.active == true)
 MTMR.state_msg.setData('Home');
 MTMR.state_pub.publish(MTMR.state_msg);
 display('Sending Home Command to MTMR');
+MTMR.jnt_pub_ready = true;
 end
+%Pause for 5 seconds to let the ARMs home
+%Need to implement and sub to listen to robot state and know when the arms
+%are ready
+pause(5);
 end
 end
 
@@ -58,7 +64,6 @@ if (get(hObject,'Value') == get(hObject,'Max'))
     display('Creating PSM1 Publisher');
     PSM1.jnt_pub = node.addPublisher('/dvrk_psm/set_position_joint','sensor_msgs/JointState');
     %Set the callback of PSM sliders to one function
-    PSM1.jnt_pub_ready = true;
     PSM1.state_msg = rosmatlab.message('std_msgs/String',node);
     PSM1.state_pub = node.addPublisher('/dvrk_psm/set_robot_state','std_msgs/String');
 else
@@ -85,7 +90,6 @@ if (get(hObject,'Value') == get(hObject,'Max'))
     display('Creating MTMR Publisher');
     MTMR.jnt_pub = node.addPublisher('/dvrk_mtm/set_position_joint','sensor_msgs/JointState');
     %Set the callback of PSM sliders to one function
-    MTMR.jnt_pub_ready = true;
     MTMR.state_msg = rosmatlab.message('std_msgs/String',node);
     MTMR.state_pub = node.addPublisher('/dvrk_mtm/set_robot_state','std_msgs/String');
 else
