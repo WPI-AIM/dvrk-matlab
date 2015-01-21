@@ -62,7 +62,7 @@ if (get(hObject,'Value') == get(hObject,'Max'))
 else
 	disp('Deleting MTMR Subscriber Topic');
     node.removeSubscriber(MTMR.sub);
-    disp('Deleting PSM1 Publisher');
+    disp('Deleting MTMR Publisher');
     node.removePublisher(MTMR.pub);
     MTMR.pub_ready = false;
 end
