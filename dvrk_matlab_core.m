@@ -8,6 +8,8 @@ clc;
 
 fig = dvrk_matlab_gui;
 fig_handles = guidata(fig);
+%Function to Init Gui and set all radio buttons to zero.
+init_gui(fig_handles);
 global MTMR PSM1;
 MTMR.pub_ready = false;
 PSM1.pub_ready = false;
