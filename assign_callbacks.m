@@ -6,6 +6,7 @@ function assign_callbacks(gui_handle)
 set(gui_handle.radiobutton_connect_to_ros,'Callback',{@radio_connect_to_ros_cb});
 set(gui_handle.radiobutton_connect_to_psm1,'Callback',{@radio_connect_to_psm1_cb,gui_handle});
 set(gui_handle.radiobutton_connect_to_mtmr,'Callback',{@radio_connect_to_mtmr_cb,gui_handle});
+set(gui_handle.pushbutton_home,'ButtonDownFcn',{@pushbutton_home,gui_handle});
 end
 
 %CallBack for Enabling connection to ROS
@@ -23,26 +24,30 @@ else
 end
 end
 
+function pushbutton_home(hObject, eventData, gui_handle)
+
+end
+
 
 %Callback for setting PSM1 publisher and subscribe
 function radio_connect_to_psm1_cb(hObject,eventData,gui_handles)
 global node PSM1;
 if (get(hObject,'Value') == get(hObject,'Max'))
 	display('Subscribing to PSM1 topic');
-    PSM1.sub = node.addSubscriber('/dvrk_psm/joint_position_current','sensor_msgs/JointState',10);
-    PSM1.sub.addCustomMessageListener({@psm1_subscriber_cb,gui_handles});
+    PSM1.jnt_sub = node.addSubscriber('/dvrk_psm/joint_position_current','sensor_msgs/JointState',10);
+    PSM1.jnt_sub.addCustomMessageListener({@psm1_subscriber_cb,gui_handles});
     %Create snsr_msg/JS type message
-    PSM1.msg = rosmatlab.message('sensor_msgs/JointState',node);
+    PSM1.jnt_msg = rosmatlab.message('sensor_msgs/JointState',node);
     display('Creating PSM1 Publisher');
-    PSM1.pub = node.addPublisher('/dvrk_psm/set_position_joint','sensor_msgs/JointState');
+    PSM1.jnt_pub = node.addPublisher('/dvrk_psm/set_position_joint','sensor_msgs/JointState');
     %Set the callback of PSM sliders to one function
-    PSM1.pub_ready = true;
+    PSM1.jnt_pub_ready = true;
 else
 	disp('Deleting PSM1 Subscriber Topic');
-    node.removeSubscriber(PSM1.sub);
+    node.removeSubscriber(PSM1.jnt_sub);
     disp('Deleting PSM1 Publisher');
-    node.removePublisher(PSM1.pub);
-    PSM1.pub_ready = false;
+    node.removePublisher(PSM1.jnt_pub);
+    PSM1.jnt_pub_ready = false;
 end
 end
 
@@ -51,20 +56,20 @@ function radio_connect_to_mtmr_cb(hObject,eventData,gui_handles)
 global node MTMR;
 if (get(hObject,'Value') == get(hObject,'Max'))
 	display('Subscribing to MTMR topic');
-    MTMR.sub = node.addSubscriber('/dvrk_mtm/joint_position_current','sensor_msgs/JointState',10);
-    MTMR.sub.addCustomMessageListener({@mtmr_subscriber_cb,gui_handles});
+    MTMR.jnt_sub = node.addSubscriber('/dvrk_mtm/joint_position_current','sensor_msgs/JointState',10);
+    MTMR.jnt_sub.addCustomMessageListener({@mtmr_subscriber_cb,gui_handles});
     %Create snsr_msg/JS type message
-    MTMR.msg = rosmatlab.message('sensor_msgs/JointState',node);
+    MTMR.jnt_msg = rosmatlab.message('sensor_msgs/JointState',node);
     display('Creating MTMR Publisher');
-    MTMR.pub = node.addPublisher('/dvrk_mtm/set_position_joint','sensor_msgs/JointState');
+    MTMR.jnt_pub = node.addPublisher('/dvrk_mtm/set_position_joint','sensor_msgs/JointState');
     %Set the callback of PSM sliders to one function
-    MTMR.pub_ready = true;
+    MTMR.jnt_pub_ready = true;
 else
 	disp('Deleting MTMR Subscriber Topic');
-    node.removeSubscriber(MTMR.sub);
+    node.removeSubscriber(MTMR.jnt_sub);
     disp('Deleting MTMR Publisher');
-    node.removePublisher(MTMR.pub);
-    MTMR.pub_ready = false;
+    node.removePublisher(MTMR.jnt_pub);
+    MTMR.jnt_pub_ready = false;
 end
 end
 
