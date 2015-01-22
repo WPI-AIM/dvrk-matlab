@@ -25,6 +25,7 @@ Matlab Interface for controlling dVRK. Requires dvrk-ros and its dependencies
  * Run this file. A GUI window will open
   * a. Click **Connect to ROS Server** radio button. On a succesful connection, the button will read Connected!
   * b. **Select the ARM type** click the radio button. Only PSM1 and MTMR implemented for now.
+  * c. Now click "Home" button to home any manipulator connected. A hardcoded delay of 5 secs is given to ensure that the manipulator(s) get time to home. You can only control a manipulator if it has been homed.
     * Now you can control which ever arm you selected, using the sliders below and read their live joint positions in the text boxes
  * Uncheck the radio buttons of the ARM types to disconnect the ROS pub and sub. Can connect and disconnect without relaunching the code
  * To disconnect matlab_ros node, just unselect the Connect radio button. Can connect and disconnect without the need to relaunch the code
