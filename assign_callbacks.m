@@ -34,19 +34,13 @@ if (PSM1.active == true)
 PSM1.state_msg.setData('Home');
 PSM1.state_pub.publish(PSM1.state_msg);
 display('Sending Home Command to PSM1');
-PSM1.jnt_pub_ready = true;
 end
 % Set state_msg = "Home" and publish to specified topic
 if (MTMR.active == true)
 MTMR.state_msg.setData('Home');
 MTMR.state_pub.publish(MTMR.state_msg);
 display('Sending Home Command to MTMR');
-MTMR.jnt_pub_ready = true;
 end
-%Pause for 5 seconds to let the ARMs home
-%Need to implement and sub to listen to robot state and know when the arms
-%are ready
-pause(5);
 end
 end
 
@@ -66,14 +60,18 @@ if (get(hObject,'Value') == get(hObject,'Max'))
     %Set the callback of PSM sliders to one function
     PSM1.state_msg = rosmatlab.message('std_msgs/String',node);
     PSM1.state_pub = node.addPublisher('/dvrk_psm/set_robot_state','std_msgs/String');
+    %Define the PSM1 state subscriber
+    PSM1.state_sub = node.addSubscriber('/dvrk_psm/robot_state_current','std_msgs/String',1);
+    PSM1.state_sub.addCustomMessageListener({@psm1_state_sub_cb,gui_handles});
 else
     PSM1.active = false;
 	disp('Deleting PSM1 Subscriber Topic');
     node.removeSubscriber(PSM1.jnt_sub);
+    node.removeSubscriber(PSM1.state_sub);
     disp('Deleting PSM1 Publisher');
     node.removePublisher(PSM1.jnt_pub);
     node.removePublisher(PSM1.state_pub);
-    PSM1.jnt_pub_ready = false;
+    PSM1.manip_state = [];
 end
 end
 
@@ -92,14 +90,18 @@ if (get(hObject,'Value') == get(hObject,'Max'))
     %Set the callback of PSM sliders to one function
     MTMR.state_msg = rosmatlab.message('std_msgs/String',node);
     MTMR.state_pub = node.addPublisher('/dvrk_mtm/set_robot_state','std_msgs/String');
+    %Define the MTMR state subscriber
+    MTMR.state_sub = node.addSubscriber('/dvrk_mtm/robot_state_current','std_msgs/String',1);
+    MTMR.state_sub.addCustomMessageListener({@mtmr_state_sub_cb,gui_handles});
 else
     MTMR.active = false;
 	disp('Deleting MTMR Subscriber Topic');
     node.removeSubscriber(MTMR.jnt_sub);
+    node.removeSubscriber(MTMR.state_sub);
     disp('Deleting MTMR Publisher');
     node.removePublisher(MTMR.jnt_pub);
     node.removePublisher(MTMR.state_pub);
-    MTMR.jnt_pub_ready = false;
+    MTMR.manip_state = [];
 end
 end
 
@@ -136,5 +138,22 @@ set(gui_handles.edit6_mtmr,'String',num2str(currPosition(6)));
 set(gui_handles.edit7_mtmr,'String',num2str(currPosition(7)));
 end
 end
+
+% Function Callback for setting PSM1 state 
+function psm1_state_sub_cb(handle,event,gui_handles)
+global PSM1
+message = event.JavaEvent.getSource;
+PSM1.manip_state = message.getData;
+set(gui_handles.edit_psm1_state,'String',char(PSM1.manip_state));
+end
+
+% Function Callback for setting MTMR state
+function mtmr_state_sub_cb(handle,event,gui_handles)
+global MTMR
+message = event.JavaEvent.getSource;
+MTMR.manip_state = message.getData;
+set(gui_handles.edit_mtmr_state,'String',char(MTMR.manip_state));
+end
+
 
 

@@ -22,7 +22,7 @@ function varargout = dvrk_matlab_gui(varargin)
 
 % Edit the above text to modify the response to help dvrk_matlab_gui
 
-% Last Modified by GUIDE v2.5 21-Jan-2015 15:53:16
+% Last Modified by GUIDE v2.5 22-Jan-2015 14:49:54
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -769,3 +769,95 @@ function pushbutton_home_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton_home (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+
+function edit_mtmr_state_Callback(hObject, eventdata, handles)
+% hObject    handle to edit_mtmr_state (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit_mtmr_state as text
+%        str2double(get(hObject,'String')) returns contents of edit_mtmr_state as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_mtmr_state_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit_mtmr_state (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit_mtml_state_Callback(hObject, eventdata, handles)
+% hObject    handle to edit_mtml_state (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit_mtml_state as text
+%        str2double(get(hObject,'String')) returns contents of edit_mtml_state as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_mtml_state_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit_mtml_state (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit_psm1_state_Callback(hObject, eventdata, handles)
+% hObject    handle to edit_psm1_state (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit_psm1_state as text
+%        str2double(get(hObject,'String')) returns contents of edit_psm1_state as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_psm1_state_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit_psm1_state (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit_psm2_state_Callback(hObject, eventdata, handles)
+% hObject    handle to edit_psm2_state (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit_psm2_state as text
+%        str2double(get(hObject,'String')) returns contents of edit_psm2_state as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_psm2_state_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit_psm2_state (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
