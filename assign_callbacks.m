@@ -64,14 +64,8 @@ if (get(hObject,'Value') == get(hObject,'Max'))
     PSM1.state_sub = node.addSubscriber('/dvrk_psm/robot_state_current','std_msgs/String',1);
     PSM1.state_sub.addCustomMessageListener({@psm1_state_sub_cb,gui_handles});
 else
-    PSM1.active = false;
-	disp('Deleting PSM1 Subscriber Topic');
-    node.removeSubscriber(PSM1.jnt_sub);
-    node.removeSubscriber(PSM1.state_sub);
-    disp('Deleting PSM1 Publisher');
-    node.removePublisher(PSM1.jnt_pub);
-    node.removePublisher(PSM1.state_pub);
-    PSM1.manip_state = [];
+    disp('Cleaning up PSM1 matlab structure');
+    PSM1 = clean_up(PSM1);
 end
 end
 
@@ -94,14 +88,8 @@ if (get(hObject,'Value') == get(hObject,'Max'))
     MTMR.state_sub = node.addSubscriber('/dvrk_mtm/robot_state_current','std_msgs/String',1);
     MTMR.state_sub.addCustomMessageListener({@mtmr_state_sub_cb,gui_handles});
 else
-    MTMR.active = false;
-	disp('Deleting MTMR Subscriber Topic');
-    node.removeSubscriber(MTMR.jnt_sub);
-    node.removeSubscriber(MTMR.state_sub);
-    disp('Deleting MTMR Publisher');
-    node.removePublisher(MTMR.jnt_pub);
-    node.removePublisher(MTMR.state_pub);
-    MTMR.manip_state = [];
+    disp('Cleaning up MTMR matlab structure');
+    MTMR = clean_up(MTMR);
 end
 end
 
@@ -156,4 +144,13 @@ set(gui_handles.edit_mtmr_state,'String',char(MTMR.manip_state));
 end
 
 
+function arm_type =  clean_up(arm_type)
+global node;
+    arm_type.active = false;
+    node.removeSubscriber(arm_type.jnt_sub);
+    node.removeSubscriber(arm_type.state_sub);
+    node.removePublisher(arm_type.jnt_pub);
+    node.removePublisher(arm_type.state_pub);
+    arm_type.manip_state = [];
+end
 
