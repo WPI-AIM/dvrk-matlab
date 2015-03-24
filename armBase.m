@@ -7,6 +7,7 @@ classdef armBase < handle
         state_sub = [];
         state_msg = [];
         arm_type = [];
+        manip_state = [];
         n_jnts = [];
         node = [];
     end
@@ -40,7 +41,7 @@ classdef armBase < handle
         function setUpPSM(obj)
             display('Subscribing to PSM1 topic');
             obj.jnt_sub = obj.node.addSubscriber('/dvrk_psm/joint_position_current','sensor_msgs/JointState',10);
-            obj.jnt_sub.addCustomMessageListener({@psm1_subscriber_cb,gui_handles});
+            obj.jnt_sub.addCustomMessageListener({@psm1_subscriber_cb,obj});
             %Create snsr_msg/JS type message
             obj.jnt_msg = rosmatlab.message('sensor_msgs/JointState',obj.node);
             display('Creating PSM1 Publisher');
@@ -50,11 +51,24 @@ classdef armBase < handle
             obj.state_pub = obj.node.addPublisher('/dvrk_psm/set_robot_state','std_msgs/String');
             %Define the PSM1 state subscriber
             obj.state_sub = obj.node.addSubscriber('/dvrk_psm/robot_state_current','std_msgs/String',1);
-            obj.state_sub.addCustomMessageListener({@psm1_state_sub_cb,gui_handles});
+            obj.state_sub.addCustomMessageListener({@psm1_state_sub_cb,obj});
         end
         
     end
         
         
+end
+
+% Putting the Callback functions outside the main class since they don't
+% work inside.
+
+function psm1_subscriber_cb(handle,event,obj)
+message = event.JavaEvent.getSource;
+obj.jnt_msg = message.getPosition;
+end
+
+function psm1_state_sub_cb(handle,event,obj)
+message = event.JavaEvent.getSource;
+obj.manip_state = message.getData;
 end
     
