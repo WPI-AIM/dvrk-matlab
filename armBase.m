@@ -1,3 +1,5 @@
+%% Created by Adnan Munawar
+% WPI
 classdef armBase < handle
     properties (SetAccess = private)
         jnt_pub = [];
