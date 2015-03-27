@@ -61,7 +61,17 @@ classdef armBase < handle
             %Define the PSM1 state subscriber
             obj.state_sub = obj.node.addSubscriber(strrep(obj.state_sub_topic_name,'<ARM_TYPE>',obj.arm_type),'std_msgs/String',1);
             obj.state_sub.addCustomMessageListener({@state_sub_cb,obj});   
-            end
+        end
+           
+        % Clean up function for removing subs, pubs and clearing
+        % manip_state;
+        function clean_up(obj)
+            obj.node.removeSubscriber(obj.jnt_sub);
+            obj.node.removeSubscriber(obj.state_sub);
+            obj.node.removePublisher(obj.jnt_pub);
+            obj.node.removePublisher(obj.state_pub);
+            obj.arm_type.manip_state = [];
+        end
                 
         end
 end
